@@ -1,26 +1,22 @@
 package model.entities;
 
+import model.exceptions.LimitException;
+
 public class Account {
 
 	private Integer number;
 	private String holder;
-	private double balance;
-	private double withdrawLimit;
-	private double newBalance;
-	private double withdraw;
-
+	private Double balance;
+	private Double withdrawLimit;
 	
 	public Account() {
-
 	}
-	
-	public Account(Integer number, String holder, double balance, double withdrawLimit) {
-		super();
+
+	public Account(Integer number, String holder, Double balance, Double withdrawLimit) {
 		this.number = number;
 		this.holder = holder;
 		this.balance = balance;
 		this.withdrawLimit = withdrawLimit;
-
 	}
 
 	public Integer getNumber() {
@@ -39,41 +35,37 @@ public class Account {
 		this.holder = holder;
 	}
 
-	public double getBalance() {
+	public Double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(double balance) {
+	public void setBalance(Double balance) {
 		this.balance = balance;
 	}
 
-	public double getWithdrawLimit() {
+	public Double getWithdrawLimit() {
 		return withdrawLimit;
 	}
-	
-	public double getNewBalance() {
-		return newBalance;
-	}
-	
-	public double getWithdraw() {
-		return withdraw;
-	}
 
-	public void setWithdraw(double withdraw) {
-		this.withdraw = withdraw;
+	public void setWithdrawLimit(Double withdrawLimit) {
+		this.withdrawLimit = withdrawLimit;
 	}
-
+	
 	public void deposit(double amount) {
-		amount =+ amount;
-	}
-
-	public void withdraw(double amount) {
-		amount =- amount;
+		balance += amount;
 	}
 	
-	public double newBalance() {
-		 return balance - withdraw;
+	public void withdraw(double amount) {
+		validateWithdraw(amount);
+		balance -= amount;
+	}
+	
+	private void validateWithdraw(double amount) {
+		if (amount > getWithdrawLimit()) {
+			throw new LimitException("Operação não permitida: Limite excedido!");
+		} 
+		if (amount > getBalance()) {
+			throw new LimitException("Operação não permitida: Saldo inferior a quantia solicitada.");
+		}
 	}
 }
-	
-	

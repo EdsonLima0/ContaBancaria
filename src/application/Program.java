@@ -1,51 +1,52 @@
 package application;
 
+import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
 
 import model.entities.Account;
-
-
+import model.exceptions.LimitException;
 
 public class Program {
 
 	public static void main(String[] args) {
-		
-		Scanner sc = new Scanner(System.in);
+
 		Locale.setDefault(Locale.US);
+		Scanner sc = new Scanner(System.in);
+
 		
-		//Account ac = new Account(Integer number, String holder, double balance, double withdrwaLimit);
-		Account ac = new Account();
-	
-		
-		System.out.println("Enter account data");
-		System.out.print("Number: ");
+		try {
+		System.out.println("Informe os dados da conta");
+		System.out.print("Numero Cliente: ");
 		int number = sc.nextInt();
+		System.out.print("Cliente: ");
 		sc.nextLine();
-		System.out.print("Holder: ");
-		sc.nextLine();
-		System.out.print("Initial balance: ");
-		ac.setBalance(sc.nextDouble());
-		System.out.print("Withdraw limit: ");
-		double lWithdraw = sc.nextDouble();
+		String holder = sc.nextLine();
+		System.out.print("Saldo inicial: ");
+		double balance = sc.nextDouble();
+		System.out.print("Limite de crédito: ");
+		double withdrawLimit = sc.nextDouble();
+
+		Account ac = new Account(number, holder, balance, withdrawLimit);
+
 		System.out.println();
+		System.out.print("Informe a quantia a levantar: ");
+		double amount = sc.nextDouble();
+
+		ac.withdraw(amount);
+		System.out.printf("Saldo atualizado: %.2f%n", ac.getBalance());
 		
-		System.out.print("Enter amount for withdraw: " );
-		ac.setWithdraw(sc.nextDouble());
+		}
 		
-		System.out.println("New balance: " + ac.newBalance() );
-		
-		
-		
-		
-		
-		
-		
-		
+		catch (LimitException e) {
+			System.out.println(e.getMessage());
+		}
 		
 		
+		catch (InputMismatchException e) {
+			System.out.println("Parametro Inválido!");
+		}
+
 		sc.close();
-
 	}
-
 }
