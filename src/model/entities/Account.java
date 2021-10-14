@@ -1,14 +1,15 @@
 package model.entities;
 
 import model.exceptions.LimitException;
+import model.services.ServiceAccount;
 
-public class Account {
+public class Account implements ServiceAccount {
 
 	private Integer number;
 	private String holder;
 	private Double balance;
 	private Double withdrawLimit;
-	
+
 	public Account() {
 	}
 
@@ -43,29 +44,31 @@ public class Account {
 		this.balance = balance;
 	}
 
-	public Double getWithdrawLimit() {
+	public double getWithdrawLimit() {
 		return withdrawLimit;
 	}
 
 	public void setWithdrawLimit(Double withdrawLimit) {
 		this.withdrawLimit = withdrawLimit;
 	}
-	
+
 	public void deposit(double amount) {
 		balance += amount;
 	}
-	
+
 	public void withdraw(double amount) {
 		validateWithdraw(amount);
 		balance -= amount;
 	}
-	
-	private void validateWithdraw(double amount) {
-		if (amount > getWithdrawLimit()) {
-			throw new LimitException("Operação não permitida: Limite excedido!");
-		} 
+
+	public double validateWithdraw(double amount) {
+		if (amount > getWithdrawLimit() && amount < getBalance()) {
+			throw new LimitException("Operação não permitida: Valor Solicitado maior que o limite permitido!");
+		}
 		if (amount > getBalance()) {
 			throw new LimitException("Operação não permitida: Saldo inferior a quantia solicitada.");
 		}
+		return amount;
 	}
+
 }

@@ -7,6 +7,7 @@ import java.util.Scanner;
 import model.entities.Account;
 import model.exceptions.LimitException;
 
+
 public class Program {
 
 	public static void main(String[] args) {
@@ -28,7 +29,8 @@ public class Program {
 		double withdrawLimit = sc.nextDouble();
 
 		Account ac = new Account(number, holder, balance, withdrawLimit);
-
+		
+		
 		System.out.println();
 		System.out.print("Informe a quantia a levantar: ");
 		double amount = sc.nextDouble();
