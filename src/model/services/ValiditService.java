@@ -32,7 +32,7 @@ public class ValiditService implements ServiceAccount {
 	}
 
 	public double validateWithdraw(double amount) {
-		if (amount > getLimite() && amount < getSaldo()) {
+		if (amount > getLimite() || amount < getSaldo()) {
 			throw new LimitException("Operação não permitida: Valor Solicitado maior que o limite permitido!");
 		}
 		if (amount > getSaldo()) {
