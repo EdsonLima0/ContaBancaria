@@ -1,23 +1,25 @@
 package model.entities;
 
-import model.exceptions.LimitException;
-import model.services.ServiceAccount;
+import model.services.ValiditService;
 
-public class Account implements ServiceAccount {
+public class Account {
 
 	private Integer number;
 	private String holder;
 	private Double balance;
 	private Double withdrawLimit;
 
+	private ValiditService validitService;
+
 	public Account() {
 	}
 
-	public Account(Integer number, String holder, Double balance, Double withdrawLimit) {
+	public Account(Integer number, String holder, Double balance, Double withdrawLimit, ValiditService validitService) {
 		this.number = number;
 		this.holder = holder;
 		this.balance = balance;
 		this.withdrawLimit = withdrawLimit;
+		this.validitService = validitService;
 	}
 
 	public Integer getNumber() {
@@ -57,18 +59,8 @@ public class Account implements ServiceAccount {
 	}
 
 	public void withdraw(double amount) {
-		validateWithdraw(amount);
+		validitService.validateWithdraw(amount);
 		balance -= amount;
-	}
-
-	public double validateWithdraw(double amount) {
-		if (amount > getWithdrawLimit() && amount < getBalance()) {
-			throw new LimitException("Operação não permitida: Valor Solicitado maior que o limite permitido!");
-		}
-		if (amount > getBalance()) {
-			throw new LimitException("Operação não permitida: Saldo inferior a quantia solicitada.");
-		}
-		return amount;
 	}
 
 }
